@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>拼豆们的快乐开销</title>
+  <style>
+    :root{--ink:#26362f;--paper:#f7f4eb;--line:#dedbd0;--coral:#ff8b62;--leaf:#6a9d81}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif}button,input,select{font:inherit}button{cursor:pointer}.page{width:min(1120px,calc(100% - 32px));margin:auto;padding:65px 0 36px}.hero{min-height:230px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;overflow:hidden}.eyebrow,.kicker{margin:0;color:#718077;font-size:11px;font-weight:800;letter-spacing:.13em}.eyebrow i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--coral);margin-right:8px}h1{margin:13px 0 16px;font-size:clamp(49px,7vw,84px);line-height:.92;letter-spacing:-.09em}h1 em{color:var(--coral);font-style:normal}.intro{margin:0;color:#78827c;font-size:14px}.beads{width:280px;height:180px;position:relative;transform:rotate(-6deg)}.bead{position:absolute;width:62px;height:62px;border-radius:50%;border:10px solid #ffb49a;background:#fff1d2;box-shadow:inset 0 0 0 5px #f7f4eb,4px 5px 0 #d9d2c0}.b1{top:5px;left:103px}.b2{top:5px;left:167px;border-color:#e4ae50}.b3{top:70px;left:39px;border-color:#a982bf}.b4{top:70px;left:103px;border-color:#6a9d81}.b5{top:70px;left:167px;border-color:#7b8ddd}.b6{top:135px;left:103px;border-color:#ff8b62}.b7{top:135px;left:167px;border-color:#e4ae50}.beads strong{position:absolute;z-index:1;top:31px;left:119px;font-size:14px;line-height:.86;letter-spacing:-.05em}.summary{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:14px}.card,.panel{background:#fffefa;border:1px solid var(--line);border-radius:20px}.total{position:relative;min-height:155px;padding:27px 29px;background:var(--ink);color:#fff;overflow:hidden}.total p,.metric p{margin:0 0 7px;font-size:12px;font-weight:800;opacity:.65}.total strong{font-size:clamp(35px,4vw,48px);letter-spacing:-.065em}.total small{display:block;margin-top:18px;color:#bdcac1;font-size:11px}.star{position:absolute;right:28px;top:22px;color:#f6d68e;font-size:40px}.metric{padding:27px 23px;display:flex;flex-direction:column;justify-content:center}.metric strong{font-size:26px;letter-spacing:-.05em}.metric span{margin-top:7px;font-size:12px;color:#748078}.grid{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;margin-top:14px}.panel{padding:26px 29px}.head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.panel h2{font-size:22px;letter-spacing:-.05em;margin:6px 0 0}.badge{padding:6px 10px;background:#edf2eb;color:#557164;border-radius:14px;font-size:11px;font-weight:800}.bars{display:grid;gap:14px;margin-top:25px}.bar-label{display:flex;align-items:center;justify-content:space-between;font-size:12px}.bar-label span{display:flex;gap:7px;align-items:center;color:#59675f}.dot{width:8px;height:8px;border-radius:50%}.track{height:7px;border-radius:10px;background:#f0eee7;margin-top:7px;overflow:hidden}.fill{height:100%;border-radius:10px}.tip{position:relative;overflow:hidden;background:#ffc9b3;border-color:#ffc9b3}.tip:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;right:-74px;bottom:-105px;background:#ff8b62;box-shadow:0 0 0 22px #ffe1d2}.quote{font:72px Georgia,serif;line-height:.65;color:#ed7755;margin:37px 0 0}.tip .words{position:relative;z-index:1;max-width:230px;font-size:15px;font-weight:800;line-height:1.8}.sticker{position:relative;z-index:1;display:flex;gap:4px}.sticker i{font-style:normal;width:27px;height:27px;display:grid;place-items:center;border-radius:7px;color:#fff;background:#26362f;font-size:12px;font-weight:800}.sticker i:nth-child(2){background:#7b8ddd}.sticker i:nth-child(3){background:#6a9d81}.sticker i:nth-child(4){background:#e4ae50}.ledger{margin-top:14px}.top-actions,.backup-actions{display:flex;gap:7px;align-items:center}.plain-btn,.add-btn{height:39px;padding:0 12px;border-radius:10px;font-size:11px;font-weight:800}.plain-btn{border:1px solid #dfe4dc;background:#fffefa;color:#617269}.add-btn{border:0;background:var(--ink);color:#fff}.add-btn span{font-size:18px;color:#f6d68e;vertical-align:-1px}.tools{margin:24px 0 17px;display:flex;justify-content:space-between;gap:12px}.search{width:250px;height:36px;border:1px solid var(--line);border-radius:10px;display:flex;align-items:center;gap:7px;padding:0 10px;color:#89948d;background:#fff}.search input{width:100%;border:0;outline:0;background:transparent;font-size:12px}.filters{display:flex;gap:5px;flex-wrap:wrap}.filters button{border:0;background:transparent;color:#748078;border-radius:8px;padding:7px 10px;font-size:12px}.filters button.active{background:#e9f0e6;color:#355844;font-weight:800}.rows{border-top:1px solid #e9e6dc}.row{display:grid;grid-template-columns:minmax(220px,2.2fr) .8fr .9fr .8fr 86px;gap:10px;min-height:59px;align-items:center;border-bottom:1px solid #ece9e0}.header{min-height:33px;color:#9aa29b;font-size:10px;font-weight:800;letter-spacing:.08em}.name{display:flex;flex-direction:column;gap:4px}.name b{font-size:13px}.name small{max-width:330px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#909791;font-size:10px}.tag{width:max-content;padding:4px 8px;border-radius:18px;font-size:10px;font-weight:800}.date{font-size:12px;color:#89918c}.amount{justify-self:end;font-size:13px}.actions{display:flex;justify-content:flex-end;gap:5px}.edit,.delete{border:0;border-radius:7px;font-size:10px;font-weight:800}.edit{padding:5px 7px;background:#edf2eb;color:#557164}.delete{width:25px;color:#a77772;background:transparent;font-size:19px}footer{text-align:center;padding:32px 0 5px;color:#89918a;font-size:12px}footer span{color:#f0a858}.shade{position:fixed;inset:0;z-index:5;display:grid;place-items:center;padding:20px;background:rgba(31,44,38,.45);backdrop-filter:blur(3px)}.shade[hidden]{display:none!important}.modal{position:relative;width:min(480px,100%);padding:29px;border-radius:21px;background:#fffefa;box-shadow:0 18px 50px rgba(28,45,36,.22)}.close{position:absolute;right:17px;top:13px;border:0;background:transparent;color:#7e8981;font-size:27px}.modal h2{margin:7px 0 24px;font-size:27px}.modal label{display:grid;gap:7px;margin-bottom:16px;color:#536359;font-size:12px;font-weight:800}.modal input,.modal select{width:100%;height:40px;padding:0 10px;border:1px solid var(--line);border-radius:9px;outline-color:#6a9d81;background:#fff;color:var(--ink);font-size:13px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.save{width:100%;height:43px;margin-top:5px;border:0;border-radius:12px;background:var(--ink);color:#fff;font-weight:800}@media(max-width:720px){.page{width:min(100% - 24px,560px);padding-top:30px}.hero{min-height:210px;padding:0 7px}.beads{transform:scale(.63) rotate(-6deg);transform-origin:right center;margin-right:-60px}.summary,.grid{grid-template-columns:1fr}.total{min-height:145px}.panel{padding:22px 17px}.head{flex-wrap:wrap}.top-actions{width:100%;justify-content:space-between}.backup-actions{flex:1}.plain-btn{flex:1;padding:0 8px}.tools{flex-direction:column}.search{width:100%}.filters{overflow:auto;flex-wrap:nowrap;padding-bottom:2px}.filters button{white-space:nowrap}.row{grid-template-columns:minmax(103px,1.65fr) .62fr .7fr .85fr 72px;gap:4px}.header{font-size:9px}.name b{font-size:12px}.name small{max-width:118px}.date{font-size:10px}.amount{font-size:11px}.tag{padding:3px 6px}.edit{padding:4px 5px}.two{gap:10px}}
+  </style>
+<style>
+  .page{padding-top:26px}
+  .page-nav{height:48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+  .page-nav strong{font-size:13px;letter-spacing:-.02em}
+  .page-nav div{display:flex;gap:5px}
+  .page-nav a{padding:8px 11px;border-radius:9px;color:#6f7b74;font-size:11px;font-weight:800;text-decoration:none}
+  .page-nav a[aria-current="page"]{background:#e9f0e6;color:#355844}
+  .page-nav a:hover{background:#fffefa;color:#355844}
+  .platform-summary{margin-top:28px;padding-top:24px;border-top:1px dashed #dedbd0}
+  .platform-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px}
+  .platform-title h3{margin:5px 0 0;font-size:18px;letter-spacing:-.04em}
+  .platform-title span{color:#89918c;font-size:10px;text-align:right}
+  .platform-foot{margin:17px 0 0;padding:11px 12px;border-radius:10px;background:#f4f1e8;color:#67736c;font-size:11px;line-height:1.7}
+  .purchase-ranking{margin-top:14px}
+  .ranking-note{color:#89918c;font-size:10px;text-align:right;line-height:1.5}
+  .ranking-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:25px}
+  .rank-column{min-width:0;padding:0 22px;border-left:1px dashed #dedbd0}
+  .rank-column:first-child{padding-left:0;border-left:0}
+  .rank-column:last-child{padding-right:0}
+  .rank-column h3{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 17px;font-size:13px}
+  .rank-column h3 small{color:#a1a8a3;font-size:9px;font-weight:500}
+  .rank-list{display:grid;gap:13px}
+  .rank-row{display:grid;grid-template-columns:23px minmax(0,1fr) auto;align-items:center;gap:8px}
+  .rank-index{width:22px;height:22px;display:grid;place-items:center;border-radius:7px;background:#f2efe6;color:#7a847e;font-size:9px;font-weight:800}
+  .rank-row:first-child .rank-index{background:#26362f;color:#f6d68e}
+  .rank-label{min-width:0}
+  .rank-label b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}
+  .rank-track{height:4px;margin-top:5px;border-radius:8px;background:#eeece4;overflow:hidden}
+  .rank-fill{height:100%;border-radius:8px;background:#6a9d81}
+  .rank-count{color:#718077;font-size:10px;font-weight:800;white-space:nowrap}
+  .platform-filter-strip{display:flex;align-items:flex-start;gap:15px;margin:-4px 0 18px;padding:13px 0;border-top:1px dashed #e4e1d7;border-bottom:1px dashed #e4e1d7}
+  .platform-filter-label{flex:none;padding-top:7px;color:#89918c;font-size:10px;font-weight:800;letter-spacing:.06em}
+  .platform-order-filters{display:flex;flex-wrap:wrap;gap:6px}
+  .platform-order-filters button{display:flex;align-items:center;gap:5px;min-height:30px;padding:6px 10px;border:1px solid #e5e2d8;border-radius:9px;background:#fffefa;color:#6f7b74;font-size:11px}
+  .platform-order-filters button:hover{border-color:#b9c9bd;color:#355844}
+  .platform-order-filters button.active{border-color:#dbe8da;background:#e9f0e6;color:#355844;font-weight:800}
+  .platform-order-filters button span{min-width:17px;padding:1px 5px;border-radius:8px;background:#f1eee6;color:#929991;font-size:9px;text-align:center}
+  .platform-order-filters button.active span{background:#fffefa;color:#557164}
+  .platform-order-filters .recent-filter{border-color:#f7d5c8;color:#c76d50}
+  .platform-order-filters .recent-filter.active{border-color:#ffb49a;background:#fff0e9;color:#b95a3d}
+  .new-badge{display:inline-block;margin-left:6px;padding:2px 5px;border-radius:6px;background:#ff8b62;color:#fff;font-size:8px;line-height:1.2;letter-spacing:.06em;vertical-align:1px;box-shadow:0 2px 6px rgba(255,139,98,.22)}
+  #entries .row[hidden]{display:none!important}
+  .filtered-empty{padding:35px 10px;text-align:center;color:#949c96;font-size:12px}
+  .spending-review{margin-top:14px}
+  .review-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+  .review-header h2{margin:0}
+  .review-header p{max-width:520px;margin:2px 0 0;color:#7d8881;font-size:11px;line-height:1.7;text-align:right}
+  .review-layout{display:grid;grid-template-columns:.9fr 1.55fr;gap:14px;margin-top:23px}
+  .review-verdict{display:flex;min-height:245px;flex-direction:column;justify-content:space-between;padding:25px;border-radius:16px;background:#26362f;color:#fff}
+  .review-verdict span{color:#b9c8bf;font-size:10px;font-weight:800;letter-spacing:.08em}
+  .review-verdict h3{max-width:280px;margin:14px 0;font-size:25px;line-height:1.25;letter-spacing:-.045em}
+  .review-verdict p{margin:0;color:#c6d1ca;font-size:11px;line-height:1.75}
+  .review-verdict strong{display:block;margin-top:20px;color:#f6d68e;font-size:27px;letter-spacing:-.04em}
+  .review-verdict small{display:block;margin-top:4px;color:#aebdb4;font-size:9px}
+  .review-list{border:1px solid #e5e2d8;border-radius:16px;overflow:hidden}
+  .review-item{display:grid;grid-template-columns:110px minmax(0,1fr) auto;align-items:center;gap:18px;min-height:76px;padding:16px 19px;background:#fffefa}
+  .review-item+.review-item{border-top:1px solid #e9e6dc}
+  .review-status{font-size:11px;font-weight:800}
+  .review-status.good{color:#4f8067}.review-status.pause{color:#c46446}.review-status.plan{color:#8a6c31}
+  .review-copy b{display:block;margin-bottom:5px;font-size:12px}
+  .review-copy small{display:block;color:#8b948e;font-size:9px;line-height:1.55}
+  .review-value{text-align:right}
+  .review-value strong{display:block;font-size:14px}
+  .review-value small{color:#929a94;font-size:9px}
+  .review-rules{display:grid;grid-template-columns:1.15fr .95fr .9fr;gap:10px;margin-top:13px}
+  .review-rule{padding:12px 14px;border-radius:11px;background:#f2efe6;color:#647068;font-size:10px;line-height:1.55}
+  .review-rule b{color:#34483d}
+  .review-caveat{margin:14px 0 0;color:#909791;font-size:9px;line-height:1.6}
+  @media(max-width:720px){
+    .ranking-grid{grid-template-columns:1fr;gap:21px}
+    .rank-column,.rank-column:first-child,.rank-column:last-child{padding:0;border-left:0}
+    .rank-column+.rank-column{padding-top:20px;border-top:1px dashed #dedbd0}
+    .platform-filter-strip{flex-direction:column;gap:7px}
+    .platform-filter-label{padding-top:0}
+    .platform-order-filters{flex-wrap:nowrap;width:100%;overflow-x:auto;padding-bottom:3px}
+    .platform-order-filters button{flex:none}
+    .review-header{display:block}.review-header p{margin-top:9px;text-align:left}
+    .review-layout{grid-template-columns:1fr}
+    .review-verdict{min-height:210px}
+    .review-item{grid-template-columns:82px minmax(0,1fr);gap:10px}
+    .review-value{grid-column:2;text-align:left}
+    .review-rules{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <main class="page">
+    <nav class="page-nav" aria-label="拼豆记录页面"><strong>MY BEAD ERA</strong><div><a href="./拼豆快乐账本.html" aria-current="page">消费账本</a></div></nav>
+    <section class="hero"><div><p class="eyebrow"><i></i>拼豆入坑账本 · 多平台订单已导入</p><h1>拼豆们的<br><em>快乐开销</em></h1><p class="intro">把每一颗小小的热爱，认真记下来。</p></div><div class="beads" aria-hidden="true"><i class="bead b1"></i><i class="bead b2"></i><i class="bead b3"></i><i class="bead b4"></i><i class="bead b5"></i><i class="bead b6"></i><i class="bead b7"></i><strong>MY<br>BEAD<br>ERA</strong></div></section>
+    <section class="summary"><article class="card total"><p>累计投入</p><strong id="total">¥0.00</strong><span class="star">✦</span><small id="count"></small></article><article class="card metric"><p>最大一笔</p><strong id="largest">¥0.00</strong><span id="largest-name"></span></article><article class="card metric"><p>主要投入</p><strong id="major">-</strong><span id="major-note"></span></article></section>
+    <section class="grid"><article class="panel"><div class="head"><div><p class="kicker">SPEND MIX</p><h2>钱都花在哪儿了</h2></div><span class="badge">已去重导入</span></div><div id="bars" class="bars"></div><div class="platform-summary"><div class="platform-title"><div><p class="kicker">BY PLATFORM</p><h3>每个平台花了多少</h3></div><span>仅统计购买支出<br>回款单独抵扣</span></div><div id="platform-bars" class="bars"></div><p id="platform-foot" class="platform-foot"></p></div></article><article class="panel tip"><p class="kicker">BEAD MOOD</p><h2>本月小贴士</h2><div class="quote">“</div><p class="words">材料是作品的底气，工具是创作的仪式感。</p><div class="sticker"><i>拼</i><i>豆</i><i>快</i><i>乐</i></div></article></section>
+    <section class="panel ledger"><div class="head"><div><p class="kicker">THE LEDGER</p><h2>每一笔，都有回响</h2></div><div class="top-actions"><div class="backup-actions"><button class="plain-btn" id="export">导出备份</button><label class="plain-btn" for="import">导入备份</label><input hidden id="import" type="file" accept="application/json,.json"></div><button class="add-btn" id="add"><span>＋</span> 记一笔</button></div></div><div class="tools"><label class="search">⌕<input id="search" placeholder="搜索品名、店铺、备注…"></label><div id="filters" class="filters"></div></div><div class="rows"><div class="row header"><span>品名</span><span>分类</span><span>日期</span><span>金额</span><span></span></div><div id="entries"></div></div></section>
+    <footer>一颗一颗拼起来，也一笔一笔记录下来。<span>✦</span></footer>
+  </main>
+  <div id="shade" class="shade" hidden><form id="form" class="modal"><button type="button" id="close" class="close">×</button><p id="modal-kicker" class="kicker">NEW LITTLE JOY</p><h2 id="modal-title">记下一笔快乐</h2><label>买了什么？<input name="name" required placeholder="例如：新颜色补豆"></label><div class="two"><label>金额（¥）<input name="amount" type="number" min="0.01" step="0.01" required placeholder="0.00"></label><label>分类<select name="category"><option>材料</option><option>工具</option><option>配件</option><option>收纳</option><option>其他</option></select></label></div><div class="two"><label>日期<input name="date" value="今天"></label><label>备注<input name="note" placeholder="店铺、数量…"></label></div><button id="save" class="save">存下这份快乐 →</button></form></div>
+  <script>
+    const KEY='bead-ledger-taobao-v1', SNAPSHOT_KEY='bead-ledger-taobao-snapshots-v1';
+    const meta={工具:['#ff8b62'],材料:['#6a9d81'],配件:['#7b8ddd'],收纳:['#e4ae50'],其他:['#a982bf']};
+    const imported=[];
+    const money=n=>new Intl.NumberFormat('zh-CN',{style:'currency',currency:'CNY'}).format(n);
+    const escape=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    localStorage.removeItem('bead-joy-ledger-local-v1'); localStorage.removeItem('bead-joy-ledger-snapshots-v1');
+    let entries; try{entries=JSON.parse(localStorage.getItem(KEY))}catch{} if(!Array.isArray(entries)){entries=imported; localStorage.setItem(KEY,JSON.stringify(entries))}
+    let filter='全部',query='',editing=null;
+    const save=()=>{localStorage.setItem(KEY,JSON.stringify(entries));let snapshots=[];try{snapshots=JSON.parse(localStorage.getItem(SNAPSHOT_KEY)||'[]')}catch{}snapshots.unshift({savedAt:new Date().toISOString(),entries});localStorage.setItem(SNAPSHOT_KEY,JSON.stringify(snapshots.slice(0,12)))};
+    function render(){const positive=entries.filter(x=>x.amount>0),total=entries.reduce((s,x)=>s+x.amount,0),totals=Object.keys(meta).map(category=>({category,amount:positive.filter(x=>x.category===category).reduce((s,x)=>s+x.amount,0)})).filter(x=>x.amount).sort((a,b)=>b.amount-a.amount),highest=[...positive].sort((a,b)=>b.amount-a.amount)[0];document.querySelector('#total').textContent=money(total);document.querySelector('#count').textContent=`淘宝已导入 · ${positive.length} 笔记录`;document.querySelector('#largest').textContent=money(highest?.amount||0);document.querySelector('#largest-name').textContent=highest?.name||'-';document.querySelector('#major').textContent=totals[0]?.category||'-';document.querySelector('#major-note').textContent=totals[0]?`${Math.round(totals[0].amount/total*100)}% 的总支出`:'';document.querySelector('#bars').innerHTML=totals.map(x=>`<div><div class="bar-label"><span><i class="dot" style="background:${meta[x.category][0]}"></i>${x.category}</span><b>${money(x.amount)}</b></div><div class="track"><div class="fill" style="width:${Math.max(5,x.amount/totals[0].amount*100)}%;background:${meta[x.category][0]}"></div></div></div>`).join('');document.querySelector('#filters').innerHTML=['全部',...Object.keys(meta)].map(x=>`<button data-filter="${x}" class="${filter===x?'active':''}">${x}</button>`).join('');const shown=entries.filter(x=>(filter==='全部'||x.category===filter)&&(`${x.name} ${x.note} ${x.date}`).toLowerCase().includes(query.toLowerCase()));document.querySelector('#entries').innerHTML=shown.map(x=>`<div class="row"><span class="name"><b>${escape(x.name)}</b><small>${escape(x.note||'')}</small></span><span class="tag" style="color:${meta[x.category][0]};background:${meta[x.category][0]}18">${x.category}</span><span class="date">${escape(x.date)}</span><strong class="amount">${money(x.amount)}</strong><span class="actions"><button class="edit" data-id="${x.id}">编辑</button><button class="delete" data-id="${x.id}" aria-label="删除">×</button></span></div>`).join('')}
+    const shade=document.querySelector('#shade'),form=document.querySelector('#form');
+    const close=()=>{shade.hidden=true;editing=null};
+    const open=entry=>{editing=entry?.id||null;form.reset();form.elements.date.value='今天';if(entry){document.querySelector('#modal-kicker').textContent='EDIT A LITTLE JOY';document.querySelector('#modal-title').textContent='修改这笔记录';document.querySelector('#save').textContent='保存修改 →';Object.assign(form.elements,{name:{value:entry.name},amount:{value:entry.amount},category:{value:entry.category},date:{value:entry.date},note:{value:entry.note||''}})}else{document.querySelector('#modal-kicker').textContent='NEW LITTLE JOY';document.querySelector('#modal-title').textContent='记下一笔快乐';document.querySelector('#save').textContent='存下这份快乐 →'}shade.hidden=false;setTimeout(()=>form.elements.name.focus(),0)};
+    document.querySelector('#add').onclick=()=>open();document.querySelector('#close').onclick=close;shade.onclick=e=>{if(e.target===shade)close()};document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});document.querySelector('#search').oninput=e=>{query=e.target.value;render()};document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.filter){filter=b.dataset.filter;render()}else if(b.classList.contains('edit'))open(entries.find(x=>x.id===b.dataset.id));else if(b.classList.contains('delete')&&confirm('确定要删除这笔记录吗？')){entries=entries.filter(x=>x.id!==b.dataset.id);save();render()}});form.onsubmit=e=>{e.preventDefault();const f=new FormData(form),next={name:f.get('name').trim(),amount:Number(f.get('amount')),category:f.get('category'),date:f.get('date').trim()||'今天',note:f.get('note').trim()};if(editing)entries=entries.map(x=>x.id===editing?{...x,...next}:x);else entries.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),...next});save();close();render()};document.querySelector('#export').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify({app:'拼豆快乐账本',exportedAt:new Date().toISOString(),entries},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`拼豆账本备份-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(url)};document.querySelector('#import').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const data=JSON.parse(await file.text()),next=Array.isArray(data)?data:data.entries;if(!Array.isArray(next))throw Error();if(confirm(`导入 ${next.length} 笔记录？这会替换当前账本。`)){entries=next;save();render();alert('备份已导入。')}}catch{alert('这个文件不是可用的拼豆账本备份。')}e.target.value=''};render();
+  </script>
+  <script>
+    /* Use direct field assignment when opening an existing record for editing. */
+    (() => {
+      const form = document.querySelector('#form');
+      const shade = document.querySelector('#shade');
+      const close = () => { shade.hidden = true; editing = null; };
+      const openForEdit = (entry) => {
+        editing = entry.id;
+        document.querySelector('#modal-kicker').textContent = 'EDIT A LITTLE JOY';
+        document.querySelector('#modal-title').textContent = '修改这笔记录';
+        document.querySelector('#save').textContent = '保存修改 →';
+        form.elements.name.value = entry.name;
+        form.elements.amount.value = entry.amount;
+        form.elements.category.value = entry.category;
+        form.elements.date.value = entry.date;
+        form.elements.note.value = entry.note || '';
+        shade.hidden = false;
+        setTimeout(() => form.elements.name.focus(), 0);
+      };
+      document.querySelector('#add').onclick = () => {
+        editing = null;
+        form.reset();
+        form.elements.date.value = '今天';
+        document.querySelector('#modal-kicker').textContent = 'NEW LITTLE JOY';
+        document.querySelector('#modal-title').textContent = '记下一笔快乐';
+        document.querySelector('#save').textContent = '存下这份快乐 →';
+        shade.hidden = false;
+      };
+      document.querySelector('#close').onclick = close;
+      document.addEventListener('click', (event) => {
+        const button = event.target.closest('.edit');
+        if (!button) return;
+        event.stopImmediatePropagation();
+        openForEdit(entries.find((entry) => entry.id === button.dataset.id));
+      }, true);
+    })();
+  </script>
+  <script>
+    (() => {
+      const platformColors = {
+        '淘宝':'#ff7a59','拼多多':'#e94e49','抖音':'#303d52','小红书':'#e66b75',
+        '京东':'#c84c43','闲鱼':'#e4ae50','手动记录':'#a982bf'
+      };
+      const platformOf = entry => {
+        const text = `${entry.note || ''} ${entry.name || ''}`;
+        return ['淘宝','拼多多','抖音','小红书','京东','闲鱼'].find(name => text.includes(name)) || '手动记录';
+      };
+      const renderPlatforms = () => {
+        const target = document.querySelector('#platform-bars');
+        const foot = document.querySelector('#platform-foot');
+        if (!target || !foot) return;
+        const paid = entries.filter(entry => Number(entry.amount) > 0);
+        const totals = paid.reduce((map,entry) => {
+          const platform = platformOf(entry);
+          map[platform] = (map[platform] || 0) + Number(entry.amount);
+          return map;
+        },{});
+        const ranked = Object.entries(totals).sort((a,b) => b[1]-a[1]);
+        const maximum = ranked[0]?.[1] || 1;
+        target.innerHTML = ranked.map(([platform,amount]) => {
+          const color = platformColors[platform] || '#a982bf';
+          return `<div><div class="bar-label"><span><i class="dot" style="background:${color}"></i>${platform}</span><b>${money(amount)}</b></div><div class="track"><div class="fill" style="width:${Math.max(5,amount/maximum*100)}%;background:${color}"></div></div></div>`;
+        }).join('');
+        const spending = paid.reduce((sum,entry) => sum + Number(entry.amount),0);
+        const recovered = Math.abs(entries.filter(entry => Number(entry.amount) < 0).reduce((sum,entry) => sum + Number(entry.amount),0));
+        const net = entries.reduce((sum,entry) => sum + Number(entry.amount),0);
+        foot.textContent = `购买支出 ${money(spending)} · 转卖/退款回款 ${money(recovered)} · 净投入 ${money(net)}`;
+      };
+      renderPlatforms();
+      new MutationObserver(renderPlatforms).observe(document.querySelector('#entries'), {childList:true});
+
+      const relabelCount = () => {
+        const target = document.querySelector('#count');
+        const label = `多平台已导入 · ${entries.length} 笔记录`;
+        if (target && target.textContent !== label) {
+          target.textContent = label;
+        }
+      };
+      relabelCount();
+      new MutationObserver(relabelCount).observe(document.querySelector('#count'), {childList:true});
+    })();
+  </script>
+  <script>
+    (() => {
+      const RECENT_DAYS = 7;
+      const RECENT_STAMP_KEY = 'bead-ledger-recent-import-stamp-v1';
+      const PLATFORM_NAMES = ['淘宝','拼多多','抖音','小红书','京东','闲鱼'];
+      let selectedPlatform = '全部平台';
+      let recentOnly = false;
+
+      const platformForRecord = entry => {
+        const text = `${entry.note || ''} ${entry.name || ''}`;
+        return PLATFORM_NAMES.find(name => text.includes(name)) || '其他';
+      };
+
+      const isRecentRecord = entry => {
+        if (!entry.createdAt) return false;
+        const created = new Date(entry.createdAt).getTime();
+        return Number.isFinite(created) && Date.now() - created < RECENT_DAYS * 24 * 60 * 60 * 1000;
+      };
+
+      if (!localStorage.getItem(RECENT_STAMP_KEY)) {
+        const importedAt = new Date().toISOString();
+        let changed = false;
+        entries = entries.map(entry => {
+          if (!String(entry.id || '').startsWith('img-') || entry.createdAt) return entry;
+          changed = true;
+          return {...entry, createdAt: importedAt};
+        });
+        if (changed) save();
+        localStorage.setItem(RECENT_STAMP_KEY, importedAt);
+      }
+
+      const ensureEnhancementUi = () => {
+        const ledger = document.querySelector('.ledger');
+        const tools = ledger?.querySelector('.tools');
+        if (ledger && tools && !document.querySelector('#platform-filter-strip')) {
+          const strip = document.createElement('div');
+          strip.id = 'platform-filter-strip';
+          strip.className = 'platform-filter-strip';
+          strip.innerHTML = '<span class="platform-filter-label">平台筛选</span><div id="platform-order-filters" class="platform-order-filters"></div>';
+          tools.insertAdjacentElement('afterend', strip);
+        }
+
+        if (ledger && !document.querySelector('#purchase-ranking')) {
+          const ranking = document.createElement('section');
+          ranking.id = 'purchase-ranking';
+          ranking.className = 'panel purchase-ranking';
+          ranking.innerHTML = `
+            <div class="head">
+              <div><p class="kicker">BUYING HABITS</p><h2>购买次数排行</h2></div>
+              <span class="ranking-note">按订单笔数统计<br>不计转卖与退款</span>
+            </div>
+            <div class="ranking-grid">
+              <div class="rank-column"><h3>常买店铺 <small>SHOP</small></h3><div id="rank-shop" class="rank-list"></div></div>
+              <div class="rank-column"><h3>常买东西 <small>ITEM TYPE</small></h3><div id="rank-item" class="rank-list"></div></div>
+              <div class="rank-column"><h3>分类频率 <small>CATEGORY</small></h3><div id="rank-category" class="rank-list"></div></div>
+            </div>`;
+          ledger.insertAdjacentElement('beforebegin', ranking);
+        }
+
+        if (ledger && !document.querySelector('#spending-review')) {
+          const review = document.createElement('section');
+          review.id = 'spending-review';
+          review.className = 'panel spending-review';
+          review.innerHTML = `
+            <div class="review-header">
+              <h2>消费体检</h2>
+              <p>从创作必需、重复购买和项目型消费三个角度看这份账本。</p>
+            </div>
+            <div class="review-layout">
+              <article class="review-verdict">
+                <div><span>当前建议</span><h3 id="review-headline">工具已经够用，下一阶段只补真正缺的颜色。</h3><p id="review-summary"></p></div>
+                <div><strong id="review-net">¥0.00</strong><small>账本净投入</small></div>
+              </article>
+              <div class="review-list">
+                <article class="review-item"><span class="review-status good">可以继续</span><span class="review-copy"><b>缺色补豆与真正耗尽的材料</b><small>材料是作品本体，但建议从整套购买改为按色号补库存。</small></span><span class="review-value"><strong id="review-core-amount">¥0.00</strong><small id="review-core-count"></small></span></article>
+                <article class="review-item"><span class="review-status pause">先暂停</span><span class="review-copy"><b>花色烫布和重复的小工具</b><small>同类功能的订单很多，先用完现有物品，新工具建议放购物车 7 天。</small></span><span class="review-value"><strong id="review-watch-amount">¥0.00</strong><small id="review-watch-count"></small></span></article>
+                <article class="review-item"><span class="review-status plan">按项目买</span><span class="review-copy"><b>展示、挂饰与数字素材</b><small>这些不是浪费，但最好先确定作品或用途，再买对应数量。</small></span><span class="review-value"><strong id="review-project-amount">¥0.00</strong><small id="review-project-count"></small></span></article>
+              </div>
+            </div>
+            <div class="review-rules">
+              <div class="review-rule"><b>补豆规则：</b>盘点色号后只补低库存。</div>
+              <div class="review-rule"><b>工具规则：</b>新功能必须解决现有工具做不到的问题。</div>
+              <div class="review-rule"><b>配件规则：</b>按已完成作品数量购买，不预囤。</div>
+            </div>
+            <p class="review-caveat">说明：分析依据订单名称和金额，无法知道实际使用频率。这是购买节奏建议，不是给每笔消费判定好坏。</p>`;
+          const ranking = document.querySelector('#purchase-ranking');
+          (ranking || ledger).insertAdjacentElement('beforebegin', review);
+        }
+      };
+
+      const itemFamily = entry => {
+        const text = `${entry.name || ''} ${entry.note || ''}`;
+        if (/补豆|豆豆|材料包|全套装|补充包|补充装/.test(text)) return '补豆 / 材料';
+        if (/拼豆板|豆板|模板|大板|120\s*钉|104\s*\*\s*104/.test(text)) return '拼豆板';
+        if (/烘焙布|烫布|搓澡巾|毛巾|硅胶垫|烫片|隔热/.test(text)) return '烫制耗材';
+        if (/豆铲|豆勺|豆梳|漏斗|取豆|摇摇乐/.test(text)) return '分豆工具';
+        if (/相框|画框|展示框|立牌|毛毡|墙贴|框条/.test(text)) return '展示装裱';
+        if (/拼豆笔|陶瓷针|打孔器|镊子|胶枪|切割/.test(text)) return '手作工具';
+        if (/收纳|挂袋|工作台|托架|桌子|小包/.test(text)) return '收纳整理';
+        if (/钥匙扣|龙虾扣|挂链|弹簧|轴承|灯|翅膀|底座/.test(text)) return '成品配件';
+        if (/手工胶|美纹纸|贴纸|磁铁|磁吸|胶点/.test(text)) return '辅助耗材';
+        return entry.category === '材料' ? '其他材料' : entry.category === '工具' ? '其他工具' : '其他';
+      };
+
+      const shopForRecord = entry => {
+        const note = String(entry.note || '').trim();
+        const explicit = note.match(/(?:店铺|商家)[:：]\s*([^;；·]+)/);
+        if (explicit) return explicit[1].trim();
+        const platformPrefix = new RegExp(`^(?:${PLATFORM_NAMES.join('|')})\\s*·\\s*([^;；]+)`);
+        const candidate = note.match(platformPrefix)?.[1]?.trim() || '';
+        if (!candidate || candidate.length > 24) return null;
+        const looksLikeShop = /店|馆|铺|工坊|工厂|材料/i.test(candidate);
+        return looksLikeShop ? candidate.replace(/￥[\d.]+.*$/, '').trim() : null;
+      };
+
+      const countBy = (records, getter) => Object.entries(records.reduce((result, entry) => {
+        const key = getter(entry);
+        if (!key) return result;
+        result[key] = (result[key] || 0) + 1;
+        return result;
+      }, {})).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'zh-CN'));
+
+      const rankHtml = (ranked, color) => {
+        const top = ranked.slice(0, 5);
+        const maximum = top[0]?.[1] || 1;
+        if (!top.length) return '<div class="filtered-empty">还没有可统计的记录</div>';
+        return top.map(([label, count], index) => `
+          <div class="rank-row">
+            <span class="rank-index">${index + 1}</span>
+            <span class="rank-label"><b>${escape(label)}</b><span class="rank-track"><i class="rank-fill" style="width:${Math.max(8, count / maximum * 100)}%;background:${color}"></i></span></span>
+            <span class="rank-count">${count} 笔</span>
+          </div>`).join('');
+      };
+
+      const renderRanking = () => {
+        const paid = entries.filter(entry => Number(entry.amount) > 0);
+        const shopTarget = document.querySelector('#rank-shop');
+        const itemTarget = document.querySelector('#rank-item');
+        const categoryTarget = document.querySelector('#rank-category');
+        if (!shopTarget || !itemTarget || !categoryTarget) return;
+        shopTarget.innerHTML = rankHtml(countBy(paid, shopForRecord), '#e4ae50');
+        itemTarget.innerHTML = rankHtml(countBy(paid, itemFamily), '#6a9d81');
+        categoryTarget.innerHTML = rankHtml(countBy(paid, entry => entry.category || '其他'), '#7b8ddd');
+      };
+
+      const renderSpendingReview = () => {
+        const paid = entries.filter(entry => Number(entry.amount) > 0);
+        const textOf = entry => `${entry.name || ''} ${entry.note || ''}`;
+        const sumRecords = records => records.reduce((sum, entry) => sum + Number(entry.amount), 0);
+        const coreRecords = paid.filter(entry => /补豆|补充包|材料包|全套装|单色拼豆|高透豆|常用色/.test(textOf(entry)));
+        const clothRecords = paid.filter(entry => /烘焙布|烫布|搓澡巾|毛巾|烫片|藤编垫|闪布|灯芯绒|亚麻粗纹|烫豆巾|硅胶烘焙垫/.test(textOf(entry)));
+        const smallToolRecords = paid.filter(entry => /豆铲|豆勺|豆梳|漏斗|取豆|摇摇乐|拼豆笔|陶瓷针|打孔器|镊子|胶枪|切割|胶带机/.test(textOf(entry)));
+        const watchRecords = [...new Map([...clothRecords, ...smallToolRecords].map(entry => [entry.id, entry])).values()];
+        const projectRecords = paid.filter(entry => /相框|画框|展示框|立牌|底座|毛毡|墙贴|图钉|挂钩|钥匙扣|龙虾扣|门扣|钥匙圈|链条|弹簧|轴承|挂链|翅膀|图纸|设计素材|软件授权|会员/.test(textOf(entry)));
+        const purchaseTotal = sumRecords(paid);
+        const netTotal = entries.reduce((sum, entry) => sum + Number(entry.amount), 0);
+        const toolSpend = sumRecords(paid.filter(entry => entry.category === '工具'));
+        const toolShare = purchaseTotal ? Math.round(toolSpend / purchaseTotal * 100) : 0;
+        const setText = (selector, value) => { const target = document.querySelector(selector); if (target) target.textContent = value; };
+        setText('#review-net', money(netTotal));
+        setText('#review-summary', `工具类已占购买支出 ${toolShare}%，当前更值得先消耗现有库存。`);
+        setText('#review-core-amount', money(sumRecords(coreRecords)));
+        setText('#review-core-count', `${coreRecords.length} 笔相关订单`);
+        setText('#review-watch-amount', money(sumRecords(watchRecords)));
+        setText('#review-watch-count', `${watchRecords.length} 笔相关订单`);
+        setText('#review-project-amount', money(sumRecords(projectRecords)));
+        setText('#review-project-count', `${projectRecords.length} 笔相关订单`);
+      };
+
+      const renderPlatformFilters = () => {
+        const target = document.querySelector('#platform-order-filters');
+        if (!target) return;
+        const counts = countBy(entries, platformForRecord).reduce((map, [name, count]) => ({...map, [name]: count}), {});
+        const currentScope = entries.filter(entry => {
+          const categoryMatches = filter === '全部' || entry.category === filter;
+          const searchMatches = `${entry.name || ''} ${entry.note || ''} ${entry.date || ''}`.toLowerCase().includes(query.toLowerCase());
+          const platformMatches = selectedPlatform === '全部平台' || platformForRecord(entry) === selectedPlatform;
+          return categoryMatches && searchMatches && platformMatches;
+        });
+        const filters = ['全部平台', ...PLATFORM_NAMES, '其他'];
+        target.innerHTML = filters.map(name => {
+          const count = name === '全部平台' ? entries.length : (counts[name] || 0);
+          return `<button type="button" data-platform-order="${name}" class="${selectedPlatform === name ? 'active' : ''}">${name}<span>${count}</span></button>`;
+        }).join('') + `<button type="button" data-recent-toggle="true" class="recent-filter ${recentOnly ? 'active' : ''}">只看 NEW<span>${currentScope.filter(isRecentRecord).length}</span></button>`;
+      };
+
+      const applyLedgerFilters = () => {
+        let visibleCount = 0;
+        document.querySelectorAll('#entries .row').forEach(row => {
+          const id = row.querySelector('.edit')?.dataset.id;
+          const entry = entries.find(item => String(item.id) === String(id));
+          if (!entry) return;
+          const recent = isRecentRecord(entry);
+          const platformMatches = selectedPlatform === '全部平台' || platformForRecord(entry) === selectedPlatform;
+          const visible = platformMatches && (!recentOnly || recent);
+          row.hidden = !visible;
+          if (visible) visibleCount += 1;
+          if (recent) {
+            const title = row.querySelector('.name b');
+            if (title && !title.querySelector('.new-badge')) title.insertAdjacentHTML('beforeend', '<span class="new-badge">NEW</span>');
+          }
+        });
+        const entriesTarget = document.querySelector('#entries');
+        let empty = document.querySelector('#filtered-empty');
+        if (!visibleCount && entriesTarget?.children.length) {
+          if (!empty) {
+            empty = document.createElement('div');
+            empty.id = 'filtered-empty';
+            empty.className = 'filtered-empty';
+            empty.textContent = '没有符合当前筛选的记录。';
+            entriesTarget.insertAdjacentElement('afterend', empty);
+          }
+        } else if (empty) empty.remove();
+      };
+
+      ensureEnhancementUi();
+      const originalRender = render;
+      render = function enhancedRender() {
+        originalRender();
+        ensureEnhancementUi();
+        renderPlatformFilters();
+        applyLedgerFilters();
+        renderRanking();
+        renderSpendingReview();
+      };
+
+      document.addEventListener('click', event => {
+        const platformButton = event.target.closest('[data-platform-order]');
+        if (platformButton) {
+          selectedPlatform = platformButton.dataset.platformOrder;
+          render();
+          return;
+        }
+        if (event.target.closest('[data-recent-toggle]')) {
+          recentOnly = !recentOnly;
+          render();
+        }
+      });
+
+      const ledgerForm = document.querySelector('#form');
+      const originalSubmit = ledgerForm.onsubmit;
+      ledgerForm.onsubmit = event => {
+        const beforeIds = new Set(entries.map(entry => String(entry.id)));
+        originalSubmit.call(ledgerForm, event);
+        let changed = false;
+        entries = entries.map(entry => {
+          if (beforeIds.has(String(entry.id)) || entry.createdAt) return entry;
+          changed = true;
+          return {...entry, createdAt: new Date().toISOString()};
+        });
+        if (changed) {
+          save();
+          render();
+        }
+      };
+
+      const importInput = document.querySelector('#import');
+      const originalImport = importInput.onchange;
+      importInput.onchange = async event => {
+        const beforeIds = new Set(entries.map(entry => String(entry.id)));
+        await originalImport.call(importInput, event);
+        let changed = false;
+        const importedAt = new Date().toISOString();
+        entries = entries.map(entry => {
+          if (beforeIds.has(String(entry.id)) || entry.createdAt) return entry;
+          changed = true;
+          return {...entry, createdAt: importedAt};
+        });
+        if (changed) {
+          save();
+          render();
+        }
+      };
+
+      render();
+    })();
+  </script>
+</body>
+</html>
