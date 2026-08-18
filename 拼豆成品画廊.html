@@ -1,0 +1,1036 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>拼豆成品画廊</title>
+  <style>
+    :root{
+      --paper:#f7f4eb;
+      --surface:#fffefa;
+      --surface-soft:#efede5;
+      --ink:#26362f;
+      --muted:#748078;
+      --faint:#969e98;
+      --line:#dedbd0;
+      --accent:#e97755;
+      --accent-soft:#ffe1d4;
+      --leaf:#6a9d81;
+      --shadow:rgba(55,67,60,.13);
+      --radius:16px;
+    }
+    @media (prefers-color-scheme:dark){
+      :root{
+        --paper:#17201c;
+        --surface:#202b25;
+        --surface-soft:#2a352f;
+        --ink:#edf1ed;
+        --muted:#b4bdb7;
+        --faint:#929c96;
+        --line:#3b4740;
+        --accent:#f08b69;
+        --accent-soft:#59372d;
+        --leaf:#88b69b;
+        --shadow:rgba(7,12,9,.34);
+      }
+    }
+    *{box-sizing:border-box}
+    html{background:var(--paper)}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.5}
+    button,input,select,textarea{font:inherit}
+    button,label[for]{cursor:pointer}
+    button:active,.button:active{transform:translateY(1px)}
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 42%,transparent);outline-offset:2px}
+    .page{width:min(1180px,calc(100% - 32px));margin:auto;padding:26px 0 42px}
+    .page-nav{height:48px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+    .page-nav strong{font-size:13px;letter-spacing:-.02em}
+    .page-nav div{display:flex;gap:5px}
+    .page-nav a{padding:8px 11px;border-radius:9px;color:var(--muted);font-size:11px;font-weight:800;text-decoration:none}
+    .page-nav a[aria-current="page"]{background:color-mix(in srgb,var(--leaf) 16%,var(--surface));color:var(--ink)}
+    .page-nav a:hover{background:var(--surface)}
+    .intro-header{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:42px;align-items:end;padding:64px 5% 48px}
+    .eyebrow{margin:0 0 13px;color:var(--leaf);font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+    h1{max-width:720px;margin:0;font-size:clamp(42px,6.5vw,78px);line-height:.98;letter-spacing:-.075em}
+    h1 em{color:var(--accent);font-style:normal}
+    .intro-copy{max-width:430px;margin:20px 0 0;color:var(--muted);font-size:14px}
+    .header-actions{display:grid;gap:9px;justify-items:stretch}
+    .add-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .primary,.secondary,.button{min-height:44px;padding:0 16px;border-radius:12px;font-size:12px;font-weight:800;text-decoration:none;transition:transform .16s ease,background .16s ease,border-color .16s ease}
+    .primary{border:1px solid var(--ink);background:var(--ink);color:var(--paper)}
+    .primary:hover{background:color-mix(in srgb,var(--ink) 88%,var(--accent))}
+    .secondary{border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+    .secondary:hover{border-color:var(--leaf)}
+    .backup-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .stats{display:grid;grid-template-columns:1.4fr 1fr 1fr;margin-bottom:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);overflow:hidden}
+    .stat{min-height:92px;padding:20px 23px;display:flex;flex-direction:column;justify-content:space-between}
+    .stat+.stat{border-left:1px solid var(--line)}
+    .stat small{color:var(--faint);font-size:10px;font-weight:800}
+    .stat strong{font-size:25px;letter-spacing:-.045em}
+    .stat:first-child{background:var(--ink);color:var(--paper)}
+    .stat:first-child small{color:color-mix(in srgb,var(--paper) 70%,transparent)}
+    .gallery-panel{padding:26px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
+    .toolbar{display:grid;grid-template-columns:minmax(210px,1fr) auto auto;gap:10px;align-items:center;margin-bottom:28px}
+    .search{min-height:42px;display:flex;align-items:center;gap:9px;padding:0 13px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--faint)}
+    .search input{width:100%;border:0;outline:0;background:transparent;color:var(--ink);font-size:12px}
+    .search input::placeholder{color:var(--faint)}
+    .filters{display:flex;gap:5px}
+    .filters button{min-height:38px;padding:0 12px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--muted);font-size:11px;font-weight:800}
+    .filters button.active{border-color:color-mix(in srgb,var(--leaf) 24%,var(--line));background:color-mix(in srgb,var(--leaf) 13%,var(--surface));color:var(--ink)}
+    .sort{height:38px;padding:0 32px 0 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-size:11px;font-weight:800}
+    .gallery{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:24px 12px}
+    .work-card{min-width:0}
+    .photo-button{display:block;width:100%;padding:0;border:0;border-radius:13px;background:var(--surface-soft);overflow:hidden;box-shadow:0 7px 20px var(--shadow);transition:transform .22s ease,box-shadow .22s ease}
+    .photo-button:hover{transform:translateY(-2px);box-shadow:0 12px 26px var(--shadow)}
+    .photo-button img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover}
+    .work-info{padding:10px 2px 0}
+    .work-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .work-info h2{min-width:0;margin:0;font-size:13px;line-height:1.35;letter-spacing:-.02em;overflow-wrap:anywhere}
+    .favorite{flex:none;width:25px;height:25px;padding:0;border:0;background:transparent;color:var(--faint);font-size:16px;font-weight:800;line-height:1}
+    .favorite[aria-pressed="true"]{color:var(--accent)}
+    .work-meta{margin:4px 0 0;color:var(--muted);font-size:9px}
+    .work-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+    .work-tags span{padding:3px 7px;border-radius:7px;background:var(--surface-soft);color:var(--muted);font-size:9px}
+    .gallery-footer{display:flex;align-items:center;justify-content:center;gap:15px;padding:30px 0 4px;color:var(--muted);font-size:10px}
+    .load-more{min-height:38px;padding:0 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-size:11px;font-weight:800}
+    .load-more:hover{border-color:var(--leaf);background:var(--surface-soft)}
+    .empty,.error-state{min-height:360px;display:grid;place-items:center;text-align:center;border:1px dashed var(--line);border-radius:var(--radius);background:linear-gradient(135deg,var(--surface),var(--surface-soft))}
+    .empty-inner{max-width:360px;padding:38px}
+    .empty-mark{width:94px;height:94px;margin:0 auto 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:5px;transform:rotate(-4deg)}
+    .empty-mark i{display:block;border:6px solid var(--accent);border-radius:50%;background:var(--surface)}
+    .empty-mark i:nth-child(2),.empty-mark i:nth-child(6){border-color:var(--leaf)}
+    .empty-mark i:nth-child(4),.empty-mark i:nth-child(8){border-color:#7b8ddd}
+    .empty h2,.error-state h2{margin:0;font-size:23px;letter-spacing:-.04em}
+    .empty p,.error-state p{margin:9px auto 20px;color:var(--muted);font-size:12px;line-height:1.75}
+    .empty .primary{display:inline-grid;place-items:center}
+    .loading{min-height:260px;display:grid;place-items:center;color:var(--muted);font-size:12px}
+    footer{display:flex;justify-content:space-between;gap:20px;padding:30px 4px 0;color:var(--faint);font-size:10px}
+    dialog{padding:0;border:0;border-radius:var(--radius);background:var(--surface);color:var(--ink);box-shadow:0 28px 80px rgba(10,18,13,.34)}
+    dialog::backdrop{background:rgba(18,28,22,.68);backdrop-filter:blur(4px)}
+    .editor{width:min(680px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto}
+    .dialog-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:21px 24px 17px;border-bottom:1px solid var(--line);background:var(--surface)}
+    .dialog-head h2{margin:0;font-size:21px;letter-spacing:-.04em}
+    .icon-button{width:36px;height:36px;border:0;border-radius:10px;background:var(--surface-soft);color:var(--ink);font-size:21px}
+    .form-body{padding:22px 24px 25px}
+    .upload-zone{min-height:185px;display:grid;place-items:center;border:1px dashed color-mix(in srgb,var(--leaf) 55%,var(--line));border-radius:var(--radius);background:var(--paper);overflow:hidden;text-align:center}
+    .upload-zone.dragging{border-color:var(--accent);background:var(--accent-soft)}
+    .upload-zone img{display:none;width:100%;max-height:340px;object-fit:contain;background:var(--surface-soft)}
+    .upload-zone.has-preview img{display:block}
+    .upload-zone.has-preview .upload-prompt{display:none}
+    .upload-prompt{padding:28px;color:var(--muted);font-size:12px}
+    .upload-prompt b{display:block;margin-bottom:6px;color:var(--ink);font-size:15px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 13px;margin-top:19px}
+    .field{display:grid;gap:7px;color:var(--muted);font-size:11px;font-weight:800}
+    .field.full{grid-column:1/-1}
+    .field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font-size:12px;font-weight:400}
+    .field input,.field select{height:42px;padding:0 11px}
+    .field textarea{min-height:86px;padding:10px 11px;resize:vertical}
+    .field input::placeholder,.field textarea::placeholder{color:var(--faint)}
+    .helper{color:var(--faint);font-size:9px;font-weight:400}
+    .form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:22px}
+    .form-actions button{min-width:108px}
+    .viewer{width:min(1120px,calc(100vw - 28px));height:min(790px,calc(100dvh - 28px));overflow:hidden;background:var(--surface)}
+    .viewer-layout{height:100%;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,.65fr)}
+    .viewer-media{min-width:0;min-height:0;display:grid;place-items:center;overflow:hidden;background:var(--surface-soft)}
+    .viewer-media img{display:block;width:100%;height:100%;min-width:0;min-height:0;object-fit:contain}
+    .viewer-copy{display:flex;min-height:0;flex-direction:column;padding:24px}
+    .viewer-copy .icon-button{align-self:flex-end}
+    .viewer-copy h2{margin:30px 0 6px;font-size:28px;line-height:1.15;letter-spacing:-.05em}
+    .viewer-meta{color:var(--muted);font-size:11px}
+    .viewer-story{margin:20px 0;color:var(--muted);font-size:12px;line-height:1.8;white-space:pre-wrap}
+    .viewer-copy .work-tags{margin-top:0}
+    .viewer-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto}
+    .viewer-actions .edit-view{grid-column:1/-1}
+    .viewer-actions .danger{border-color:color-mix(in srgb,var(--accent) 35%,var(--line));color:var(--accent)}
+    .viewer-actions button:disabled{cursor:not-allowed;opacity:.38}
+    .phone-dialog{width:min(460px,calc(100vw - 28px));padding:26px;text-align:center}
+    .phone-dialog .icon-button{position:absolute;top:16px;right:16px}
+    .phone-dialog h2{margin:4px 42px 8px;font-size:25px;letter-spacing:-.045em}
+    .phone-dialog>p{margin:0 auto;color:var(--muted);font-size:12px;line-height:1.7}
+    .qr-frame{width:230px;height:230px;margin:23px auto 18px;padding:13px;border:1px solid var(--line);border-radius:var(--radius);background:#f8f8f3}
+    .qr-frame img{display:block;width:100%;height:100%;image-rendering:pixelated}
+    .phone-url{display:block;margin:0 auto;padding:11px;border-radius:10px;background:var(--surface-soft);color:var(--ink);font-size:10px;line-height:1.6;overflow-wrap:anywhere;user-select:all}
+    .phone-note{margin-top:14px!important;color:var(--faint)!important;font-size:10px!important}
+    .batch-dialog{width:min(860px,calc(100vw - 28px));max-height:calc(100dvh - 28px);overflow:auto}
+    .batch-intro{margin:0 0 18px;color:var(--muted);font-size:11px;line-height:1.7}
+    .batch-settings{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:13px;margin-bottom:20px}
+    .batch-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-height:43dvh;overflow:auto;padding:2px}
+    .batch-item{display:grid;grid-template-columns:82px minmax(0,1fr) 34px;gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--paper)}
+    .batch-item img{display:block;width:82px;height:82px;border-radius:9px;object-fit:cover;background:var(--surface-soft)}
+    .batch-placeholder{width:82px;height:82px;display:grid;place-items:center;padding:8px;border-radius:9px;background:var(--surface-soft);color:var(--muted);font-size:9px;line-height:1.5;text-align:center}
+    .batch-placeholder.error{color:var(--accent)}
+    .batch-title{display:grid;gap:5px;min-width:0;color:var(--muted);font-size:9px;font-weight:800}
+    .batch-title input{min-width:0;width:100%;height:38px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font-size:11px}
+    .batch-remove{width:32px;height:32px;border:0;border-radius:9px;background:var(--surface-soft);color:var(--muted);font-size:18px}
+    .batch-progress{min-height:20px;margin-top:13px;color:var(--muted);font-size:10px}
+    @media(max-width:1050px){
+      .gallery{grid-template-columns:repeat(4,minmax(0,1fr))}
+    }
+    @media(max-width:760px){
+      .page{width:min(100% - 22px,600px);padding-top:14px}
+      .intro-header{grid-template-columns:1fr;gap:26px;padding:44px 4px 32px}
+      h1{font-size:clamp(40px,13vw,60px)}
+      .header-actions{width:100%}
+      .stats{grid-template-columns:1fr 1fr}
+      .stat:first-child{grid-column:1/-1}
+      .stat:nth-child(2){border-left:0}
+      .stat:nth-child(3){border-left:1px solid var(--line)}
+      .gallery-panel{padding:17px}
+      .toolbar{grid-template-columns:1fr auto}
+      .search{grid-column:1/-1}
+      .filters{overflow-x:auto}
+      .filters button{flex:none}
+      .gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 10px}
+      .work-tags{display:none}
+      .work-info h2{font-size:12px}
+      footer{display:block;line-height:1.8}
+      .form-grid{grid-template-columns:1fr}
+      .field.full{grid-column:auto}
+      .batch-settings{grid-template-columns:1fr}
+      .batch-list{grid-template-columns:1fr;max-height:48dvh}
+      .viewer{overflow:auto}
+      .viewer-layout{display:block;height:auto;min-height:100%}
+      .viewer-media{height:58dvh}
+      .viewer-copy{min-height:42dvh}
+      .viewer-copy h2{margin-top:24px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="page-nav" aria-label="拼豆记录页面">
+      <strong>MY BEAD ERA</strong>
+      <div><a href="./">消费账本</a><a href="./拼豆成品画廊.html" aria-current="page">成品画廊</a></div>
+    </nav>
+
+    <header class="intro-header">
+      <div>
+        <p class="eyebrow">FINISHED WORKS</p>
+        <h1>把快乐拼成<br><em>一张张照片</em></h1>
+        <p class="intro-copy">每完成一件作品，就在这里留下一张照片和当时的心情。</p>
+      </div>
+      <div class="header-actions">
+        <div class="add-row">
+          <button class="primary" id="add-work" type="button">＋ 添加一件</button>
+          <button class="secondary" id="batch-add" type="button">批量添加照片</button>
+          <input id="batch-files" type="file" accept="image/*,.heic,.heif" multiple hidden>
+        </div>
+        
+        <div class="backup-row">
+          <button class="secondary" id="export-works" type="button">导出作品备份</button>
+          <label class="secondary button" for="import-works" style="display:grid;place-items:center">导入备份</label>
+          <input id="import-works" type="file" accept="application/json,.json" hidden>
+        </div>
+      </div>
+    </header>
+
+    <section class="stats" aria-label="作品统计">
+      <div class="stat"><small>已经完成</small><strong id="total-count">0 件作品</strong></div>
+      <div class="stat"><small>本月完成</small><strong id="month-count">0 件</strong></div>
+      <div class="stat"><small>特别喜欢</small><strong id="favorite-count">0 件</strong></div>
+    </section>
+
+    <section class="gallery-panel">
+      <div class="toolbar">
+        <label class="search">⌕<input id="search" type="search" placeholder="搜索作品名、标签或故事"></label>
+        <div class="filters" aria-label="作品筛选">
+          <button type="button" data-filter="all" class="active">全部</button>
+          <button type="button" data-filter="favorite">特别喜欢</button>
+        </div>
+        <select class="sort" id="sort" aria-label="排序方式">
+          <option value="newest">最新完成</option>
+          <option value="oldest">最早完成</option>
+          <option value="added">最近添加</option>
+        </select>
+      </div>
+      <div id="gallery" class="loading">正在打开你的作品档案...</div>
+      <div class="gallery-footer" id="gallery-footer" hidden><span id="gallery-progress"></span><button class="load-more" id="load-more" type="button">加载更多</button></div>
+    </section>
+
+    <footer><span>照片只保存在当前浏览器中，请定期导出备份。</span><span>每件作品，都是花费变成快乐的证据。</span></footer>
+  </main>
+
+  <dialog id="editor" class="editor">
+    <form id="work-form" method="dialog">
+      <div class="dialog-head"><h2 id="editor-title">添加新成品</h2><button class="icon-button" type="button" data-close-editor aria-label="关闭">×</button></div>
+      <div class="form-body">
+        <label class="upload-zone" id="upload-zone" for="photo">
+          <img id="image-preview" alt="待保存照片预览">
+          <span class="upload-prompt"><b>选择成品照片</b>点击选择，也可以把照片拖到这里<br>照片会自动压缩后保存在本机</span>
+        </label>
+        <input id="photo" name="photo" type="file" accept="image/*,.heic,.heif" hidden>
+        <div class="form-grid">
+          <label class="field full">作品名称<input name="title" required maxlength="80" placeholder="例如：夏日西瓜杯垫"></label>
+          <label class="field">完成日期<input name="date" type="date" required></label>
+          <label class="field">作品类型<select name="category"><option>摆件</option><option>挂件</option><option>相框</option><option>杯垫</option><option>冰箱贴</option><option>其他</option></select></label>
+          <label class="field full">标签<input name="tags" maxlength="120" placeholder="例如：宝可梦、送朋友、第一次做"><span class="helper">用顿号、逗号或空格分开</span></label>
+          <label class="field full">作品故事<textarea name="story" maxlength="600" placeholder="用了多久、送给谁、哪里最喜欢，随便记一点..."></textarea></label>
+        </div>
+        <div class="form-actions"><button class="secondary" type="button" data-close-editor>取消</button><button class="primary" id="save-work" type="submit">保存作品</button></div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="batch-dialog" class="batch-dialog">
+    <form id="batch-form" method="dialog">
+      <div class="dialog-head"><h2>批量添加作品</h2><button class="icon-button" type="button" data-close-batch aria-label="关闭">×</button></div>
+      <div class="form-body">
+        <p class="batch-intro">一次最多选择 80 张。作品名会先取自文件名，HEIC 照片会在 Mac 本地自动转换。</p>
+        <div class="batch-settings">
+          <label class="field">完成日期<input id="batch-date" type="date" required></label>
+          <label class="field">作品类型<select id="batch-category"><option>摆件</option><option>挂件</option><option>相框</option><option>杯垫</option><option>冰箱贴</option><option>其他</option></select></label>
+          <label class="field">共同标签<input id="batch-tags" maxlength="120" placeholder="例如：宝可梦、送朋友"></label>
+        </div>
+        <div class="batch-list" id="batch-list"></div>
+        <div class="batch-progress" id="batch-progress" role="status"></div>
+        <div class="form-actions"><button class="secondary" type="button" data-close-batch>取消</button><button class="primary" id="batch-save" type="submit">保存这些作品</button></div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="viewer" class="viewer">
+    <div class="viewer-layout">
+      <div class="viewer-media"><img id="viewer-image" alt=""></div>
+      <div class="viewer-copy">
+        <button class="icon-button" type="button" data-close-viewer aria-label="关闭">×</button>
+        <h2 id="viewer-title"></h2>
+        <div class="viewer-meta" id="viewer-meta"></div>
+        <p class="viewer-story" id="viewer-story"></p>
+        <div class="work-tags" id="viewer-tags"></div>
+        <div class="viewer-actions">
+          <button class="secondary" type="button" data-view-step="prev">上一张</button>
+          <button class="secondary" type="button" data-view-step="next">下一张</button>
+          <button class="secondary edit-view" type="button" data-view-edit>编辑这件作品</button>
+          <button class="secondary danger edit-view" type="button" data-view-delete>删除这件作品</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  
+
+  <script>
+    const DB_NAME = 'bead-finished-gallery-v1';
+    const STORE_NAME = 'works';
+    const DB_VERSION = 1;
+    const SERVER_MODE = false;
+    const SERVER_TOKEN = new URLSearchParams(location.search).get('token') || '';
+    const PAGE_SIZE = 40;
+    const MAX_BATCH = 80;
+    let works = [];
+    let visibleWorks = [];
+    let visibleLimit = PAGE_SIZE;
+    let currentFilter = 'all';
+    let query = '';
+    let editingId = null;
+    let viewingId = null;
+    let previewUrl = null;
+    let viewerUrl = null;
+    let cardUrls = [];
+    let batchItems = [];
+    let batchSaving = false;
+    let batchSession = 0;
+    let normalizedSingleFile = null;
+
+    const editor = document.querySelector('#editor');
+    const batchDialog = document.querySelector('#batch-dialog');
+    const batchForm = document.querySelector('#batch-form');
+    const batchFiles = document.querySelector('#batch-files');
+    const batchList = document.querySelector('#batch-list');
+    const viewer = document.querySelector('#viewer');
+    const form = document.querySelector('#work-form');
+    const photoInput = document.querySelector('#photo');
+    const uploadZone = document.querySelector('#upload-zone');
+    const preview = document.querySelector('#image-preview');
+    const gallery = document.querySelector('#gallery');
+    const galleryFooter = document.querySelector('#gallery-footer');
+    const galleryProgress = document.querySelector('#gallery-progress');
+    const loadMore = document.querySelector('#load-more');
+    const escapeHtml = value => String(value || '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[character]));
+    const today = () => new Date().toLocaleDateString('sv-SE');
+
+    const dbPromise = new Promise((resolve,reject) => {
+      const request = indexedDB.open(DB_NAME, DB_VERSION);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME,{keyPath:'id'});
+      };
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+
+    function apiFetch(path,options = {}){
+      const headers = new Headers(options.headers || {});
+      if (SERVER_TOKEN) headers.set('X-Gallery-Token',SERVER_TOKEN);
+      return fetch(path,{...options,headers});
+    }
+
+    async function readAll(){
+      if (SERVER_MODE){
+        const response = await apiFetch('/api/works');
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || '无法读取 Mac 上的作品数据');
+        return payload;
+      }
+      const db = await dbPromise;
+      return new Promise((resolve,reject) => {
+        const request = db.transaction(STORE_NAME,'readonly').objectStore(STORE_NAME).getAll();
+        request.onsuccess = () => resolve(request.result || []);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function putWork(work){
+      if (SERVER_MODE){
+        const {photoBlob,thumbBlob,photoUrl,thumbUrl,...meta} = work;
+        const payload = {...meta};
+        if (photoBlob instanceof Blob) payload.photoData = await blobToDataUrl(photoBlob);
+        if (thumbBlob instanceof Blob) payload.thumbData = await blobToDataUrl(thumbBlob);
+        const response = await apiFetch('/api/works',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || '无法把作品写入 Mac');
+        return result;
+      }
+      const db = await dbPromise;
+      return new Promise((resolve,reject) => {
+        const request = db.transaction(STORE_NAME,'readwrite').objectStore(STORE_NAME).put(work);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function removeWork(id){
+      if (SERVER_MODE){
+        const response = await apiFetch(`/api/works/${encodeURIComponent(id)}`,{method:'DELETE'});
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || '无法删除这件作品');
+        return;
+      }
+      const db = await dbPromise;
+      return new Promise((resolve,reject) => {
+        const request = db.transaction(STORE_NAME,'readwrite').objectStore(STORE_NAME).delete(id);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    function blobUrl(blob){
+      if (typeof blob === 'string') return blob;
+      return blob ? URL.createObjectURL(blob) : '';
+    }
+
+    function workPhotoSource(work){
+      return SERVER_MODE ? (work.photoUrl || work.photoBlob) : (work.photoBlob || work.photoUrl);
+    }
+
+    function workThumbSource(work){
+      return SERVER_MODE
+        ? (work.thumbUrl || work.photoUrl || work.thumbBlob || work.photoBlob)
+        : (work.thumbBlob || work.photoBlob || work.thumbUrl || work.photoUrl);
+    }
+
+    function clearCardUrls(){
+      cardUrls.forEach(url => URL.revokeObjectURL(url));
+      cardUrls = [];
+    }
+
+    function formatDate(date){
+      if (!date) return '未填写日期';
+      const parts = String(date).split('-');
+      return parts.length === 3 ? `${parts[0]}年${Number(parts[1])}月${Number(parts[2])}日` : date;
+    }
+
+    function parseTags(value){
+      return String(value || '').split(/[、，,\s]+/).map(tag => tag.trim()).filter(Boolean).slice(0,12);
+    }
+
+    function render(){
+      clearCardUrls();
+      const lower = query.toLowerCase();
+      const sorted = works.filter(work => {
+        const matchesFilter = currentFilter === 'all' || work.favorite;
+        const haystack = `${work.title || ''} ${work.story || ''} ${(work.tags || []).join(' ')} ${work.category || ''}`.toLowerCase();
+        return matchesFilter && haystack.includes(lower);
+      });
+      const sortMode = document.querySelector('#sort').value;
+      sorted.sort((a,b) => {
+        if (sortMode === 'oldest') return String(a.date).localeCompare(String(b.date));
+        if (sortMode === 'added') return String(b.createdAt).localeCompare(String(a.createdAt));
+        return String(b.date).localeCompare(String(a.date)) || String(b.createdAt).localeCompare(String(a.createdAt));
+      });
+      visibleWorks = sorted;
+      const renderedWorks = sorted.slice(0,visibleLimit);
+
+      const month = today().slice(0,7);
+      document.querySelector('#total-count').textContent = `${works.length} 件作品`;
+      document.querySelector('#month-count').textContent = `${works.filter(work => String(work.date).startsWith(month)).length} 件`;
+      document.querySelector('#favorite-count').textContent = `${works.filter(work => work.favorite).length} 件`;
+
+      if (!works.length){
+        galleryFooter.hidden = true;
+        gallery.className = 'empty';
+        gallery.innerHTML = `<div class="empty-inner"><div class="empty-mark" aria-hidden="true">${'<i></i>'.repeat(9)}</div><h2>第一件作品，等你放进来</h2><p>添加照片、完成日期和一小段故事，慢慢拼成自己的作品档案。</p><button class="primary" type="button" data-empty-add>＋ 添加第一件成品</button></div>`;
+        return;
+      }
+      if (!sorted.length){
+        galleryFooter.hidden = true;
+        gallery.className = 'empty';
+        gallery.innerHTML = '<div class="empty-inner"><h2>没有找到符合条件的作品</h2><p>可以换一个关键词，或切回“全部”查看。</p></div>';
+        return;
+      }
+
+      gallery.className = 'gallery';
+      gallery.innerHTML = renderedWorks.map(work => {
+        const url = blobUrl(workThumbSource(work));
+        if (url.startsWith('blob:')) cardUrls.push(url);
+        const tags = (work.tags || []).slice(0,2).map(tag => `<span>${escapeHtml(tag)}</span>`).join('');
+        return `<article class="work-card">
+          <button class="photo-button" type="button" data-view="${escapeHtml(work.id)}" aria-label="查看${escapeHtml(work.title)}大图"><img src="${url}" alt="${escapeHtml(work.title)}" loading="lazy" decoding="async"></button>
+          <div class="work-info"><div class="work-top"><h2>${escapeHtml(work.title)}</h2><button class="favorite" type="button" data-favorite="${escapeHtml(work.id)}" aria-label="${work.favorite ? '取消收藏' : '收藏'}${escapeHtml(work.title)}" aria-pressed="${Boolean(work.favorite)}">${work.favorite ? '♥' : '♡'}</button></div><p class="work-meta">${escapeHtml(work.category || '其他')} · ${escapeHtml(formatDate(work.date))}</p>${tags ? `<div class="work-tags">${tags}</div>` : ''}</div>
+        </article>`;
+      }).join('');
+      galleryFooter.hidden = false;
+      galleryProgress.textContent = `已显示 ${renderedWorks.length} / ${sorted.length} 件`;
+      loadMore.hidden = renderedWorks.length >= sorted.length;
+      loadMore.textContent = `再看 ${Math.min(PAGE_SIZE,sorted.length - renderedWorks.length)} 件`;
+    }
+
+    function cleanupPreview(){
+      if (previewUrl?.startsWith('blob:')) URL.revokeObjectURL(previewUrl);
+      previewUrl = null;
+    }
+
+    function setPreview(blob){
+      cleanupPreview();
+      if (!blob){
+        uploadZone.classList.remove('has-preview');
+        preview.removeAttribute('src');
+        return;
+      }
+      previewUrl = blobUrl(blob);
+      preview.src = previewUrl;
+      uploadZone.classList.add('has-preview');
+    }
+
+    function openEditor(work = null){
+      editingId = work?.id || null;
+      normalizedSingleFile = null;
+      form.reset();
+      photoInput.value = '';
+      form.elements.date.value = work?.date || today();
+      form.elements.category.value = work?.category || '摆件';
+      form.elements.title.value = work?.title || '';
+      form.elements.tags.value = (work?.tags || []).join('、');
+      form.elements.story.value = work?.story || '';
+      photoInput.required = !work;
+      document.querySelector('#editor-title').textContent = work ? '编辑成品记录' : '添加新成品';
+      document.querySelector('#save-work').textContent = work ? '保存修改' : '保存作品';
+      setPreview(work ? workPhotoSource(work) : null);
+      editor.showModal();
+    }
+
+    function closeEditor(){
+      editor.close();
+      editingId = null;
+      normalizedSingleFile = null;
+      cleanupPreview();
+    }
+
+    async function imageFromBlob(blob){
+      const url = blobUrl(blob);
+      try{
+        const image = new Image();
+        await new Promise((resolve,reject) => {
+          image.onload = resolve;
+          image.onerror = reject;
+          image.src = url;
+        });
+        return {image,width:image.naturalWidth,height:image.naturalHeight};
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function canvasBlob(image,width,height,quality){
+      return new Promise((resolve,reject) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext('2d');
+        context.fillStyle = '#f7f4eb';
+        context.fillRect(0,0,width,height);
+        context.drawImage(image,0,0,width,height);
+        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('图片压缩失败')),'image/jpeg',quality);
+      });
+    }
+
+    async function prepareImage(file){
+      const {image,width,height} = await imageFromBlob(file);
+      if (!width || !height) throw new Error('无法读取这张图片');
+      const sizeFor = maximum => {
+        const scale = Math.min(1,maximum / Math.max(width,height));
+        return {width:Math.max(1,Math.round(width * scale)),height:Math.max(1,Math.round(height * scale))};
+      };
+      const large = sizeFor(2200);
+      const small = sizeFor(520);
+      const [photoBlob,thumbBlob] = await Promise.all([
+        canvasBlob(image,large.width,large.height,.88),
+        canvasBlob(image,small.width,small.height,.78)
+      ]);
+      return {photoBlob,thumbBlob,width:large.width,height:large.height};
+    }
+
+    function fileWithType(file,type,extension){
+      const name = String(file.name || 'photo').replace(/\.[^.]+$/,'') + extension;
+      return new File([file],name,{type,lastModified:file.lastModified || Date.now()});
+    }
+
+    async function normalizeImageFile(file){
+      const bytes = new Uint8Array(await file.slice(0,16).arrayBuffer());
+      if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return file.type === 'image/jpeg' ? file : fileWithType(file,'image/jpeg','.jpg');
+      if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) return file.type === 'image/png' ? file : fileWithType(file,'image/png','.png');
+      const brand = String.fromCharCode(...bytes.slice(4,12)).toLowerCase();
+      const looksLikeHeic = /ftyp(heic|heix|hevc|hevx|mif1|msf1)/.test(brand);
+      const namedHeic = /\.(heic|heif|heics)$/i.test(file.name) || /image\/hei[cf]/i.test(file.type);
+      if (!looksLikeHeic && !namedHeic) return file;
+      const source = file.type && file.type.startsWith('image/') ? file : new Blob([file],{type:'image/heic'});
+      return fileWithType(source,'image/heic','.heic');
+    }
+
+    function titleFromFile(file,index){
+      const base = String(file.name || '').replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').trim();
+      return base || `未命名作品 ${index + 1}`;
+    }
+
+    function renderBatchList(){
+      const waiting = batchItems.some(item => item.status === 'converting');
+      batchList.innerHTML = batchItems.map((item,index) => `<div class="batch-item">
+        ${item.previewUrl ? `<img src="${item.previewUrl}" alt="第 ${index + 1} 张待保存照片">` : `<div class="batch-placeholder ${item.status === 'error' ? 'error' : ''}">${item.status === 'error' ? '无法读取' : '正在转换 HEIC'}</div>`}
+        <label class="batch-title">作品名称<input type="text" maxlength="80" value="${escapeHtml(item.title)}" data-batch-title="${index}" required>${item.error ? `<span>${escapeHtml(item.error)}</span>` : ''}</label>
+        <button class="batch-remove" type="button" data-batch-remove="${index}" aria-label="移除第 ${index + 1} 张照片" ${waiting ? 'disabled' : ''}>×</button>
+      </div>`).join('');
+      const failed = batchItems.some(item => item.status === 'error');
+      document.querySelector('#batch-save').textContent = waiting ? '正在准备照片' : batchItems.length ? `保存 ${batchItems.length} 件作品` : '保存这些作品';
+      document.querySelector('#batch-save').disabled = !batchItems.length || waiting || failed;
+    }
+
+    function cleanupBatch(){
+      batchSession += 1;
+      batchItems.forEach(item => { if (item.previewUrl) URL.revokeObjectURL(item.previewUrl); });
+      batchItems = [];
+      batchFiles.value = '';
+      batchList.innerHTML = '';
+      document.querySelector('#batch-progress').textContent = '';
+    }
+
+    function closeBatch(){
+      if (batchSaving) return;
+      if (batchDialog.open) batchDialog.close();
+      cleanupBatch();
+    }
+
+    async function openBatch(fileList){
+      const images = [...fileList].filter(file => file.type.startsWith('image/') || /\.(heic|heif|heics)$/i.test(file.name));
+      if (!images.length) return alert('请选择照片文件。');
+      cleanupBatch();
+      const session = batchSession;
+      const selected = images.slice(0,MAX_BATCH);
+      batchItems = selected.map((file,index) => ({
+        source:file,
+        file:null,
+        title:titleFromFile(file,index),
+        previewUrl:'',
+        error:'',
+        status:'converting'
+      }));
+      document.querySelector('#batch-date').value = today();
+      document.querySelector('#batch-category').value = '摆件';
+      document.querySelector('#batch-tags').value = '';
+      document.querySelector('#batch-progress').textContent = images.length > MAX_BATCH ? `这次先载入前 ${MAX_BATCH} 张，其余照片请分下一批添加。` : `已选择 ${batchItems.length} 张照片。`;
+      renderBatchList();
+      batchDialog.showModal();
+      for (let index = 0; index < batchItems.length; index += 1){
+        if (session !== batchSession) return;
+        const item = batchItems[index];
+        document.querySelector('#batch-progress').textContent = `正在准备 ${index + 1} / ${batchItems.length} 张照片...`;
+        try{
+          item.file = await normalizeImageFile(item.source);
+          if (session !== batchSession) return;
+          item.previewUrl = URL.createObjectURL(item.file);
+          item.status = 'ready';
+        } catch(error){
+          item.status = 'error';
+          item.error = error?.message || '无法读取这张照片';
+        }
+        renderBatchList();
+      }
+      if (session !== batchSession) return;
+      const failed = batchItems.filter(item => item.status === 'error').length;
+      document.querySelector('#batch-progress').textContent = failed ? `有 ${failed} 张照片无法读取，请移除后再保存。` : `已准备好 ${batchItems.length} 张照片。`;
+    }
+
+    document.querySelector('#batch-add').addEventListener('click',() => batchFiles.click());
+    batchFiles.addEventListener('change',() => {
+      if (batchFiles.files.length) openBatch(batchFiles.files);
+    });
+    batchList.addEventListener('input',event => {
+      const input = event.target.closest('[data-batch-title]');
+      if (!input) return;
+      const item = batchItems[Number(input.dataset.batchTitle)];
+      if (item) item.title = input.value;
+    });
+    batchList.addEventListener('click',event => {
+      const button = event.target.closest('[data-batch-remove]');
+      if (!button || batchSaving) return;
+      const index = Number(button.dataset.batchRemove);
+      const [removed] = batchItems.splice(index,1);
+      if (removed?.previewUrl) URL.revokeObjectURL(removed.previewUrl);
+      renderBatchList();
+      document.querySelector('#batch-progress').textContent = batchItems.length ? `还会保存 ${batchItems.length} 张照片。` : '这批照片已经全部移除。';
+    });
+    document.querySelectorAll('[data-close-batch]').forEach(button => button.addEventListener('click',closeBatch));
+    batchDialog.addEventListener('click',event => { if (event.target === batchDialog) closeBatch(); });
+    batchDialog.addEventListener('cancel',event => {
+      if (batchSaving) event.preventDefault();
+      else cleanupBatch();
+    });
+
+    batchForm.addEventListener('submit',async event => {
+      event.preventDefault();
+      if (!batchItems.length || batchSaving || batchItems.some(item => item.status !== 'ready')) return;
+      const saveButton = document.querySelector('#batch-save');
+      const progress = document.querySelector('#batch-progress');
+      const sharedDate = document.querySelector('#batch-date').value;
+      const sharedCategory = document.querySelector('#batch-category').value;
+      const sharedTags = parseTags(document.querySelector('#batch-tags').value);
+      batchSaving = true;
+      saveButton.disabled = true;
+      const failures = [];
+      let saved = 0;
+      const pending = [...batchItems];
+      try{
+        for (let index = 0; index < pending.length; index += 1){
+          const item = pending[index];
+          progress.textContent = `正在处理 ${index + 1} / ${pending.length}：${item.title || '未命名作品'}`;
+          try{
+            const imageData = await prepareImage(item.file);
+            const timestamp = new Date().toISOString();
+            await putWork({
+              id:crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${index}-${Math.random().toString(16).slice(2)}`,
+              title:item.title.trim() || `未命名作品 ${index + 1}`,
+              date:sharedDate,
+              category:sharedCategory,
+              tags:sharedTags,
+              story:'',
+              favorite:false,
+              createdAt:timestamp,
+              updatedAt:timestamp,
+              ...imageData
+            });
+            saved += 1;
+          } catch(error){
+            failures.push({...item,error:error?.message || '保存失败'});
+          }
+        }
+        works = await readAll();
+        visibleLimit = PAGE_SIZE;
+        currentFilter = 'all';
+        query = '';
+        document.querySelector('#search').value = '';
+        document.querySelector('#sort').value = 'added';
+        document.querySelectorAll('[data-filter]').forEach(button => button.classList.toggle('active',button.dataset.filter === 'all'));
+        render();
+        if (!failures.length){
+          batchSaving = false;
+          closeBatch();
+          alert(`已经保存 ${saved} 件作品。`);
+          return;
+        }
+        pending.filter(item => !failures.includes(item)).forEach(item => {
+          if (!failures.some(failure => failure.previewUrl === item.previewUrl)) URL.revokeObjectURL(item.previewUrl);
+        });
+        batchItems = failures;
+        renderBatchList();
+        progress.textContent = `已保存 ${saved} 件，还有 ${failures.length} 件失败。你可以保留它们再试一次。`;
+      } finally {
+        batchSaving = false;
+        saveButton.disabled = !batchItems.length;
+      }
+    });
+
+    photoInput.addEventListener('change',async() => {
+      const file = photoInput.files[0];
+      normalizedSingleFile = null;
+      if (!file) return setPreview(null);
+      const saveButton = document.querySelector('#save-work');
+      const oldLabel = saveButton.textContent;
+      saveButton.disabled = true;
+      saveButton.textContent = '正在准备照片...';
+      try{
+        const normalized = await normalizeImageFile(file);
+        if (photoInput.files[0] !== file) return;
+        normalizedSingleFile = normalized;
+        setPreview(normalized);
+      } catch(error){
+        if (photoInput.files[0] === file){
+          photoInput.value = '';
+          setPreview(null);
+          alert(error?.message || '无法读取这张照片。');
+        }
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = oldLabel;
+      }
+    });
+
+    ['dragenter','dragover'].forEach(type => uploadZone.addEventListener(type,event => {
+      event.preventDefault();
+      uploadZone.classList.add('dragging');
+    }));
+    ['dragleave','drop'].forEach(type => uploadZone.addEventListener(type,event => {
+      event.preventDefault();
+      uploadZone.classList.remove('dragging');
+    }));
+    uploadZone.addEventListener('drop',event => {
+      const file = [...event.dataTransfer.files].find(item => item.type.startsWith('image/'));
+      if (!file) return;
+      const transfer = new DataTransfer();
+      transfer.items.add(file);
+      photoInput.files = transfer.files;
+      photoInput.dispatchEvent(new Event('change'));
+    });
+
+    form.addEventListener('submit',async event => {
+      event.preventDefault();
+      const saveButton = document.querySelector('#save-work');
+      const oldLabel = saveButton.textContent;
+      saveButton.disabled = true;
+      saveButton.textContent = '正在保存...';
+      try{
+        const existing = works.find(work => work.id === editingId);
+        const sourceFile = photoInput.files[0];
+        const file = sourceFile ? (normalizedSingleFile || await normalizeImageFile(sourceFile)) : null;
+        const imageData = file ? await prepareImage(file) : existing;
+        if (!imageData?.photoBlob && !imageData?.photoUrl) throw new Error('请选择一张成品照片');
+        const work = {
+          id:existing?.id || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+          title:form.elements.title.value.trim(),
+          date:form.elements.date.value,
+          category:form.elements.category.value,
+          tags:parseTags(form.elements.tags.value),
+          story:form.elements.story.value.trim(),
+          favorite:Boolean(existing?.favorite),
+          createdAt:existing?.createdAt || new Date().toISOString(),
+          updatedAt:new Date().toISOString(),
+          photoBlob:imageData.photoBlob,
+          thumbBlob:imageData.thumbBlob,
+          width:imageData.width,
+          height:imageData.height
+        };
+        await putWork(work);
+        works = await readAll();
+        closeEditor();
+        render();
+      } catch(error){
+        alert(error?.message || '保存失败，请换一张图片再试。');
+      } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = oldLabel;
+      }
+    });
+
+    function closeViewer(){
+      viewer.close();
+      viewingId = null;
+      if (viewerUrl?.startsWith('blob:')) URL.revokeObjectURL(viewerUrl);
+      viewerUrl = null;
+      document.querySelector('#viewer-image').removeAttribute('src');
+    }
+
+    function openViewer(id){
+      const work = works.find(item => String(item.id) === String(id));
+      if (!work) return;
+      viewingId = work.id;
+      if (viewerUrl?.startsWith('blob:')) URL.revokeObjectURL(viewerUrl);
+      viewerUrl = blobUrl(workPhotoSource(work));
+      const image = document.querySelector('#viewer-image');
+      image.src = viewerUrl;
+      image.alt = work.title;
+      document.querySelector('#viewer-title').textContent = work.title;
+      document.querySelector('#viewer-meta').textContent = `${work.category || '其他'} · ${formatDate(work.date)}`;
+      document.querySelector('#viewer-story').textContent = work.story || '这件作品还没有写故事。';
+      document.querySelector('#viewer-tags').innerHTML = (work.tags || []).map(tag => `<span>${escapeHtml(tag)}</span>`).join('');
+      const index = visibleWorks.findIndex(item => item.id === work.id);
+      document.querySelector('[data-view-step="prev"]').disabled = index <= 0;
+      document.querySelector('[data-view-step="next"]').disabled = index < 0 || index >= visibleWorks.length - 1;
+      if (!viewer.open) viewer.showModal();
+    }
+
+    gallery.addEventListener('click',async event => {
+      if (event.target.closest('[data-empty-add]')) return openEditor();
+      const viewButton = event.target.closest('[data-view]');
+      if (viewButton) return openViewer(viewButton.dataset.view);
+      const favoriteButton = event.target.closest('[data-favorite]');
+      if (favoriteButton){
+        const work = works.find(item => String(item.id) === String(favoriteButton.dataset.favorite));
+        if (!work) return;
+        await putWork({...work,favorite:!work.favorite,updatedAt:new Date().toISOString()});
+        works = await readAll();
+        render();
+      }
+    });
+
+    document.querySelector('#add-work').addEventListener('click',() => openEditor());
+    document.querySelectorAll('[data-close-editor]').forEach(button => button.addEventListener('click',closeEditor));
+    document.querySelectorAll('[data-close-viewer]').forEach(button => button.addEventListener('click',closeViewer));
+    editor.addEventListener('click',event => { if (event.target === editor) closeEditor(); });
+    viewer.addEventListener('click',event => { if (event.target === viewer) closeViewer(); });
+    editor.addEventListener('close',cleanupPreview);
+    viewer.addEventListener('close',() => {
+      if (viewerUrl?.startsWith('blob:')) URL.revokeObjectURL(viewerUrl);
+      viewerUrl = null;
+    });
+
+    document.querySelector('[data-view-step="prev"]').addEventListener('click',() => {
+      const index = visibleWorks.findIndex(work => work.id === viewingId);
+      if (index > 0) openViewer(visibleWorks[index - 1].id);
+    });
+    document.querySelector('[data-view-step="next"]').addEventListener('click',() => {
+      const index = visibleWorks.findIndex(work => work.id === viewingId);
+      if (index >= 0 && index < visibleWorks.length - 1) openViewer(visibleWorks[index + 1].id);
+    });
+    document.querySelector('[data-view-edit]').addEventListener('click',() => {
+      const work = works.find(item => item.id === viewingId);
+      closeViewer();
+      if (work) openEditor(work);
+    });
+    document.querySelector('[data-view-delete]').addEventListener('click',async() => {
+      const work = works.find(item => item.id === viewingId);
+      if (!work || !confirm(`确定删除“${work.title}”吗？删除后只能从备份恢复。`)) return;
+      await removeWork(work.id);
+      closeViewer();
+      works = await readAll();
+      render();
+    });
+
+    loadMore.addEventListener('click',() => {
+      visibleLimit += PAGE_SIZE;
+      render();
+    });
+    document.querySelector('#search').addEventListener('input',event => {
+      query = event.target.value;
+      visibleLimit = PAGE_SIZE;
+      render();
+    });
+    document.querySelector('#sort').addEventListener('change',() => {
+      visibleLimit = PAGE_SIZE;
+      render();
+    });
+    document.querySelector('.filters').addEventListener('click',event => {
+      const button = event.target.closest('[data-filter]');
+      if (!button) return;
+      currentFilter = button.dataset.filter;
+      visibleLimit = PAGE_SIZE;
+      document.querySelectorAll('[data-filter]').forEach(item => item.classList.toggle('active',item === button));
+      render();
+    });
+
+    function blobToDataUrl(blob){
+      return new Promise((resolve,reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(blob);
+      });
+    }
+
+    document.querySelector('#export-works').addEventListener('click',async() => {
+      if (!works.length) return alert('还没有作品可以备份。');
+      if (SERVER_MODE){
+        const link = document.createElement('a');
+        link.href = `/api/backup${SERVER_TOKEN ? `?token=${encodeURIComponent(SERVER_TOKEN)}` : ''}`;
+        link.click();
+        return;
+      }
+      const exported = [];
+      for (const work of works){
+        const {photoBlob,thumbBlob,...meta} = work;
+        exported.push({...meta,photoData:await blobToDataUrl(photoBlob)});
+      }
+      const payload = {app:'拼豆成品画廊',version:1,exportedAt:new Date().toISOString(),works:exported};
+      const url = URL.createObjectURL(new Blob([JSON.stringify(payload)],{type:'application/json'}));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `拼豆成品画廊备份-${today()}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.querySelector('#import-works').addEventListener('change',async event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      try{
+        const payload = JSON.parse(await file.text());
+        if (!Array.isArray(payload.works)) throw new Error('不是可用的成品画廊备份');
+        if (!confirm(`导入 ${payload.works.length} 件作品？相同记录会更新。`)) return;
+        for (const item of payload.works){
+          if (!item.photoData || !item.id) continue;
+          const source = await fetch(item.photoData).then(response => response.blob());
+          const imageData = await prepareImage(source);
+          const {photoData,...meta} = item;
+          await putWork({...meta,...imageData});
+        }
+        works = await readAll();
+        render();
+        alert('作品备份已导入。');
+      } catch(error){
+        alert(error?.message || '导入失败，请检查备份文件。');
+      } finally {
+        event.target.value = '';
+      }
+    });
+
+    document.addEventListener('keydown',event => {
+      if (!viewer.open) return;
+      if (event.key === 'ArrowLeft') document.querySelector('[data-view-step="prev"]').click();
+      if (event.key === 'ArrowRight') document.querySelector('[data-view-step="next"]').click();
+    });
+
+    
+
+    (async() => {
+      try{
+        works = await readAll();
+        render();
+        if (SERVER_MODE){
+          document.querySelector('footer span').textContent = '照片保存在 Mac 的“拼豆成品数据”文件夹中。';
+          let fingerprint = JSON.stringify(works.map(work => [work.id,work.updatedAt]));
+          setInterval(async() => {
+            if (editor.open || batchDialog.open) return;
+            try{
+              const latest = await readAll();
+              const nextFingerprint = JSON.stringify(latest.map(work => [work.id,work.updatedAt]));
+              if (nextFingerprint !== fingerprint){
+                works = latest;
+                fingerprint = nextFingerprint;
+                render();
+                if (viewer.open && viewingId) openViewer(viewingId);
+              }
+            } catch {}
+          },3000);
+        }
+      } catch(error){
+        gallery.className = 'error-state';
+        gallery.innerHTML = '<div class="empty-inner"><h2>作品档案暂时打不开</h2><p>请确认浏览器允许本地页面保存数据，然后重新打开本页。</p></div>';
+      }
+    })();
+  </script>
+</body>
+</html>
